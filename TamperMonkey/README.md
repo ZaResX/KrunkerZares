@@ -8,3 +8,4 @@ __________________________________
 4. Paste the script and save it
 5. Open https://krunker.io/
 __________________________________
+more gonna come soon..
