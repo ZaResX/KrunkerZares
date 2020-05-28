@@ -13,5 +13,5 @@ __________________________________
 
 Watch this: https://www.youtube.com/watch?v=qLjCXeOs7NI
 __________________________________
--![Test](https://img.shields.io/github/followers/zaresx?style=social)
--![Test](https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social)
+- ![Test](https://img.shields.io/github/followers/zaresx?style=social)
+- ![Test](https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social)
