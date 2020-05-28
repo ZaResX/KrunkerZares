@@ -1,4 +1,4 @@
-># KRUNKER ZARES 
+># KRUNKER ZARES RE BORN
 https://krunker.io/ edit exploit *"Take Over The World"*
 __________________________________
 >**KRUNKER ZARES** overview
