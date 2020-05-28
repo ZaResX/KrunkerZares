@@ -17,4 +17,5 @@ __________________________________
 - [![Forks] https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social
 - [![Stars] https://img.shields.io/github/stars/Zaresx/KrunkerZares?style=social
 - [![Watchers] https://img.shields.io/github/watchers/zaresx/krunkerzares?style=social
+https://img.shields.io/github/watchers/zaresx/krunkerzares?style=social
 
