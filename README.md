@@ -1,6 +1,7 @@
 ># KRUNKER ZARES 
+[![Test](https://img.shields.io/github/followers/zaresx?style=social)]
 https://krunker.io/ edit exploit *"Take Over The World"*
-+ [![Test](https://img.shields.io/github/followers/zaresx?style=social)](https://discord.gg/Xr9swaQ)
+
 __________________________________
 >**KRUNKER ZARES** overview
 - KRUNKER ZARES is an free publish krunker cheat that works for client and browser. Exploring and providing stuff.
