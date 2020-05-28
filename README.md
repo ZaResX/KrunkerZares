@@ -13,8 +13,8 @@ __________________________________
 
 Watch this: https://www.youtube.com/watch?v=qLjCXeOs7NI
 __________________________________
-- (https://img.shields.io/github/followers/zaresx?style=social)
-- (https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social)
-- (https://img.shields.io/github/stars/Zaresx/KrunkerZares?style=social)
-- (https://img.shields.io/github/watchers/Zaresx/KrunkerZares?style=social)
+- https://img.shields.io/github/followers/zaresx?style=social
+- https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social
+- https://img.shields.io/github/stars/Zaresx/KrunkerZares?style=social
+- https://img.shields.io/github/watchers/zaresx/krunkerzares?style=social
 
