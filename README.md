@@ -1,5 +1,5 @@
 ># KRUNKER ZARES 
-![Test](https://img.shields.io/github/followers/zaresx?style=social)
+![Test](https://img.shields.io/github/followers/zaresx?style=social) ![Test](https://img.shields.io/github/forks/zaresx/KrunkerZares?style=social)
 - https://krunker.io/ edit exploit *"Take Over The World"*
 
 __________________________________
