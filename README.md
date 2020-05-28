@@ -1,6 +1,6 @@
 ># KRUNKER ZARES
 https://krunker.io/ edit exploit *"Take Over The World"*
-[![Test](https://travis-ci.org/larsbrinkhoff/xForth.svg?branch=master)](https://travis-ci.org/larsbrinkhoff/xForth)
+[![Test](https://discord.gg/Xr9swaQ)](https://youtube.com/zaresx)
 __________________________________
 >**KRUNKER ZARES** overview
 - KRUNKER ZARES is an free publish krunker cheat that works for client and browser. Exploring and providing stuff.
