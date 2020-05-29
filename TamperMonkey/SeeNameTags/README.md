@@ -23,3 +23,17 @@ if (args[0] instanceof Object && args[0].isPlayer)
 let regex = /if\(!\w+\['(\w+)']\)continue/; //this is the hook. You can look to change it if it's broken
 ```
 >So `isPlayer` is the function we want.
+3. Open `game.js` and search for `isPlayer` value. And we will find
+```js
+this['isPlayer'] = !0x0, //line 129648
+```
+```js
+aX['elm']['children'][0x4]['style']['display'] = aU['spectTarget'] && aU['spectTarget']['isPlayer'] && aU['spectTarget']['sid'] == aX['player']['sid'] ? 'inline-block' : //line 137559
+```
+```js
+aU['spectTarget']['isPlayer'] && aT['players'] && aT['players']['list'] && 0x0 > aT['players']['list']['indexOf'](aU['spectTarget'])) //line 138279
+```
+```js
+aU['spectTarget']['isPlayer'] && (!cu['crouch'] && (cu['crouch'] = 0x0), //line 138300
+```
+>So we found it times.
