@@ -8,7 +8,7 @@ __________________________________
 __________________________________
 >**KRUNKER ZARES** future plans
 - KRUNKER ZARES will be developt for tampermonkey in coming days
-- Some change shit lmafo
+- Some exploit will be leaked too
 __________________________________
 >**KRUNKER ZARES** `v0.4` AHK Release:
 - https://direct-link.net/116715/KrunkerAimAssist Pass `m1QqK51QD3gm8yTjoNtaFu3JAzTWBr0s6S98JNgRYA4`
