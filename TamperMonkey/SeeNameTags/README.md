@@ -1,4 +1,5 @@
-># NameTags "*See enemies thru walls"
+__________________________________
+># NameTags "See enemies thru walls"
 __________________________________
 >**NameTags** usage
 1. Open `NameTags.js` or *[Click Here](https://raw.githubusercontent.com/ZaResX/KrunkerZares/master/TamperMonkey/SeeNameTags/NameTags.js)*
