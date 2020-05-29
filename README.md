@@ -1,5 +1,6 @@
 ># KRUNKER ZARES *"RE BORN!"*
 https://krunker.io/ edit exploit *"Take Over The World"*
+>Krunker.io Hack
 __________________________________
 >**KRUNKER ZARES** overview
 - KRUNKER ZARES is an free publish krunker cheat that works for client and browser. Exploring and providing stuff.
