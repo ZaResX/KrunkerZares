@@ -25,7 +25,6 @@
             }
         }
     }
-    //Hook Control
     const decode = window.TextDecoder.prototype.decode; 
     window.TextDecoder.prototype.decode = function(...args) {
         let data = decode.apply(this, args);
