@@ -5,4 +5,5 @@ __________________________________
 - Client available *[here](https://github.com/ZaResX/KrunkerZares/releases/download/2.4.5/Official.Krunker.io.Client.exe)*
 - Download and use as normal
 - Not that **HARD** anyways?
+^that's just a test version of the installer
 __________________________________
