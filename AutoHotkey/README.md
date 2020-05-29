@@ -1,5 +1,5 @@
 __________________________________
-># AHK
+># AutoHotkey or AHK
 __________________________________
 >**KRUNKER ZARES** `v0.4` AHK Release:
 - https://direct-link.net/116715/KrunkerAimAssist Pass `m1QqK51QD3gm8yTjoNtaFu3JAzTWBr0s6S98JNgRYA4`
