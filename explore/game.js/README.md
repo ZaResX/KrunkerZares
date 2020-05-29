@@ -1,1 +1,1 @@
-># GAME.JS
+># game.js
