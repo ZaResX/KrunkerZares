@@ -46,3 +46,11 @@ gr && 0x6 == gr['length'] ? gr[0x3] == location['href']['match'](/^(https?:\/\/)
 showWindow(0x1b)) : showWindow(0x18) : location['href'] = gq : gq['match'](/^([A-Z]+):(\w+)$/) ? window['switchServer'](gq) : showWindow(0x18);
 }
 ```
+```js
+showWindow(0x1b)) : showWindow(0x18) : location['href'] = gq : gq['match'](/^([A-Z]+):(\w+)$/) ? window['switchServer'](gq) : showWindow(0x18);
+```
+__________________________________
+>Now we have everything we need. In any case the NameTag doesn't work it means that they have changed `isPlayer` value to something new. You can use those examples from `v2.4.5` to find what is the new value. In older versions it was `Seen`, `inView` and lot more. So you need to search for the new value
+__________________________________
+>Good Luck on hunting! :D
+__________________________________
