@@ -8,7 +8,7 @@ __________________________________
 
 >![console](https://user-images.githubusercontent.com/66065991/83246001-2d9d0980-a1aa-11ea-9f2d-69375d3da6d4.png)
 
->-**It should look like this now.**
+>- **It should look like this now.**
 __________________________________
 >- **Now you need to find OBJ loader.**
 
