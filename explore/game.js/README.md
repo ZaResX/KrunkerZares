@@ -30,7 +30,7 @@ __________________________________
 
 >![OBJ](https://user-images.githubusercontent.com/66065991/83247767-b4eb7c80-a1ac-11ea-9f33-3b1d1014417a.png)
 __________________________________
->- **Now you are in** `game.js` **and you can explore everything by your self**
+>- **Now you are in** `game.js` **and you can explore everything by your self.**
 > **Hope this helps you to get better.**
 > **Share this to your friends (;**
 __________________________________
