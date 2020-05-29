@@ -5,7 +5,7 @@ __________________________________
 - https://direct-link.net/116715/KrunkerAimAssist Pass `m1QqK51QD3gm8yTjoNtaFu3JAzTWBr0s6S98JNgRYA4`
 - https://direct-link.net/116715/KrunkerHelpHand Pass `HcvUPWk1wBp3uxBYGxA3E8izi66NUVao1bfs21YiY4M`
 - https://direct-link.net/116715/KrunkerZares Pass `hu6GFGutB4CrltUyAhI-eevztd8Y4nBulx6GNQb7z9g`
-^ Use those links if you want to support
+- ^ Use those links if you want to support
 
 Watch this: https://www.youtube.com/watch?v=qLjCXeOs7NI
 __________________________________
