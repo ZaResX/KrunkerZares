@@ -10,10 +10,3 @@ __________________________________
 - KRUNKER ZARES will be developt for tampermonkey in coming days
 - Some exploit will be leaked too
 __________________________________
->**KRUNKER ZARES** `v0.4` AHK Release:
-- https://direct-link.net/116715/KrunkerAimAssist Pass `m1QqK51QD3gm8yTjoNtaFu3JAzTWBr0s6S98JNgRYA4`
-- https://direct-link.net/116715/KrunkerHelpHand Pass `HcvUPWk1wBp3uxBYGxA3E8izi66NUVao1bfs21YiY4M`
-- https://direct-link.net/116715/KrunkerZares Pass `hu6GFGutB4CrltUyAhI-eevztd8Y4nBulx6GNQb7z9g`
-
-Watch this: https://www.youtube.com/watch?v=qLjCXeOs7NI
-__________________________________
