@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Krunker NameTags
 // @namespace    https://github.com/ZaResX/KrunkerZares/
-// @version      2.4.4
-// @description  HRT leak v SkidLamer Fix v Own Edit
+// @version      2.4.5
+// @description  Why am I able to see names through walls
 // @author       ZaRes X
 // @match        *://krunker.io/*
 // @run-at       document-start
