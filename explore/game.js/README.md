@@ -22,3 +22,15 @@ __________________________________
 
 >![OBJ](https://user-images.githubusercontent.com/66065991/83247168-d435da00-a1ab-11ea-84b0-f6e606de7081.png)
 __________________________________
+>- **Click on pretty print to be able to read the code**
+
+>![OBJ](https://user-images.githubusercontent.com/66065991/83247671-8bcaec00-a1ac-11ea-8a7a-b2c756201d33.png)
+__________________________________
+>- **The code will now look like this**
+
+>![OBJ](https://user-images.githubusercontent.com/66065991/83247767-b4eb7c80-a1ac-11ea-9f33-3b1d1014417a.png)
+__________________________________
+>- **Now you are in** `game.js` **and you can explore everything by your self**
+> **Hope this helps you to get better.**
+> **Share this to your friends (;**
+__________________________________
