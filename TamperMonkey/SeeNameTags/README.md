@@ -19,3 +19,4 @@ __________________________________
 ```js
 if (args[0] instanceof Object && args[0].isPlayer)
 ```
+so `isPlayer` is the function we want.
