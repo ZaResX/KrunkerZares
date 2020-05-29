@@ -1,3 +1,4 @@
+__________________________________
 ># Font
 __________________________________
 >**Font.js** usage
@@ -6,6 +7,6 @@ __________________________________
 3. Make a new script
 4. Paste the script and save it
 5. Open https://krunker.io/
->Your game text have changed!
+>*Your game text have changed!*
 __________________________________
 
