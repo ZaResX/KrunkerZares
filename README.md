@@ -12,5 +12,5 @@ __________________________________
 __________________________________
 >**KRUNKER ZARES** available now
 - *[TamperMonkey](https://github.com/ZaResX/KrunkerZares/tree/master/TamperMonkey)*
-- *[AutoHotkey Script](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)*
+- *[AutoHotkey](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)*
 __________________________________
