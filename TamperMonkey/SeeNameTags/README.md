@@ -15,8 +15,11 @@ __________________________________
 >- **So let's get to basics.**
 - `First of all I don't have much knowledge on this and I can make something wrong but if I do I'll try to learn and to fix it as fast as I can.`
 1. Open `game.js` for `v2.4.5` [Here](https://github.com/ZaResX/KrunkerZares/blob/master/explore/game.js/version/2.4.5.js) and `NameTags.js` for `v2.4.5` [Here](https://github.com/ZaResX/KrunkerZares/releases/download/2.4.5.0/NameTags.js).
-2. Find the code in `NameTags.js` 
+2. Find the code in `NameTags.js` and find this coming things
 ```js 
 if (args[0] instanceof Object && args[0].isPlayer)
+```
+```js
+let regex = /if\(!\w+\['(\w+)']\)continue/; //this is the hook. You can look to change it if it's broken
 ```
 >So `isPlayer` is the function we want.
