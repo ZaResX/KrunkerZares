@@ -9,3 +9,4 @@ __________________________________
 5. Open *https://krunker.io/*
 >Your able to see your enemies now
 __________________________________
+>**How to fix** `NameTags.js` if it get's patched?
