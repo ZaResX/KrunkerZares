@@ -37,5 +37,12 @@ aU['spectTarget']['isPlayer'] && aT['players'] && aT['players']['list'] && 0x0 >
 aU['spectTarget']['isPlayer'] && (!cu['crouch'] && (cu['crouch'] = 0x0), //line 138300
 ```
 >So we found it 4 times.
-4. And the hook in `NameTags.js` `let regex = /if\(!\w+\['(\w+)']\)continue/;` we need to find it.
-
+4. And the hook in `NameTags.js` `let regex = /if\(!\w+\['(\w+)']\)continue/;` we need to find it in `game.js`
+```js
+//line 137052
+function eI(gq) {
+var gr = gq['match'](/^(https?:\/\/)?(www\.)?(.+)krunker\.io\/\?(party|game)=(.+)$/);
+gr && 0x6 == gr['length'] ? gr[0x3] == location['href']['match'](/^(https?:\/\/)?(www\.)?(.+)krunker\.io\/\?(party|game)=(.+)$/)[0x3] ? 'game' == gr[0x4] ? window['switchServer'](gr[0x5]) : 'party' == gr[0x4] ? (ax(!0x1, gr[0x5]),
+showWindow(0x1b)) : showWindow(0x18) : location['href'] = gq : gq['match'](/^([A-Z]+):(\w+)$/) ? window['switchServer'](gq) : showWindow(0x18);
+}
+```
