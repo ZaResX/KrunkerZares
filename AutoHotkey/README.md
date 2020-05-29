@@ -18,4 +18,5 @@ __________________________________
 6. Open *https://krunker.io/* and enjoy
 __________________________________
 > Use this to make your own script *https://www.autohotkey.com/*
+>- Use this as example `https://github.com/HackerHansen/Krunker-color-aimbot`
 __________________________________
