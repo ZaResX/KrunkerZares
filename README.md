@@ -12,6 +12,6 @@ __________________________________
 - Some exploit will be leaked too
 __________________________________
 >**KRUNKER ZARES** available now
-- *[TamperMonkey](https://github.com/ZaResX/KrunkerZares/tree/master/TamperMonkey)*
-- *[AutoHotkey](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)*
+- [TamperMonkey](https://github.com/ZaResX/KrunkerZares/tree/master/TamperMonkey)
+- [AutoHotkey](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)
 __________________________________
