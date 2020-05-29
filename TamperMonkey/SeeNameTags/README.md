@@ -14,5 +14,5 @@ __________________________________
 __________________________________
 >- **So let's get to basics.**
 - `First of all I don't have much knowledge on this and I can make something wrong but if I do I'll try to learn and to fix it as fast as I can.`
-1. Open `game.js` for `v2.4.5` [Here](https://github.com/ZaResX/KrunkerZares/blob/master/explore/game.js/version/2.4.5.js) and `NameTags.js` for `v2.4.5` (https://github.com/ZaResX/KrunkerZares/releases/download/2.4.5.0/NameTags.js).
+1. Open `game.js` for `v2.4.5` [Here](https://github.com/ZaResX/KrunkerZares/blob/master/explore/game.js/version/2.4.5.js) and `NameTags.js` for `v2.4.5` [Here](https://github.com/ZaResX/KrunkerZares/releases/download/2.4.5.0/NameTags.js).
 2. 
