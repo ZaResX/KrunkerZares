@@ -37,3 +37,5 @@ aU['spectTarget']['isPlayer'] && aT['players'] && aT['players']['list'] && 0x0 >
 aU['spectTarget']['isPlayer'] && (!cu['crouch'] && (cu['crouch'] = 0x0), //line 138300
 ```
 >So we found it times.
+4. And the hook in `NameTags.js` `let regex = /if\(!\w+\['(\w+)']\)continue/;` we need to find it.
+
