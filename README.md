@@ -16,3 +16,6 @@ __________________________________
 - [AutoHotkey](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)
 - [Krunker.io Client](https://github.com/ZaResX/KrunkerZares/tree/master/Client)
 __________________________________
+Best exploits ever! #ReBornZRX
+__________________________________
+
