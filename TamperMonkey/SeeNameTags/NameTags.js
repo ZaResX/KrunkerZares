@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Krunker NameTags
 // @namespace    https://github.com/ZaResX/KrunkerZares/
-// @version      2.4.5
+// @version      2.4.7
 // @description  Why am I able to see names through walls
 // @author       ZaRes X
 // @match        *://krunker.io/*
