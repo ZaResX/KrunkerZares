@@ -38,7 +38,7 @@ class Utilities {
             isSliding: false,
             delta:1,
             deathDelay:2800,
-			roogyMath:false,
+	    roogyMath:false,
         }
         this.activeMenuIndex = 0;
         this.activeLineIndex = 0;
