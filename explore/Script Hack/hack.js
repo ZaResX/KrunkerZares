@@ -222,7 +222,7 @@ function patch(script) {
     //##############################################################################################################################################
     script = script.replace(/(\w+)\[\'\w+\'\](\(\w+\[\'x\'\]\,\w+\[\'y\'\]\+\w+\[\'height\'\]\/1.5\,\w+\[\'z\'\])/, `$1['${camLookAt}']$2`);
     script = script.replace(/!(\w+)\[\'transparent\'\]/g, `$& && (!${getHack}("Pierce").status || (!$1.penetrable || !${myself}.weapon.pierce))`);
-    script = script.replace(/if\(!\w+\['\w+Seen'\]\)continue;/, `if(!${getHack}("ESP").status)continue;`);
+    script = script.replace(/if\(!\w+\['\w+Seen'\]\)continue;/, `if(!${getHack}("ESP").status)continue;`);  //replace Seen with new value :: v2.4.7 "isPlayer" [Change**] "w+Seen"
     script = script.replace(/(this\[\'fpsCamera\'\]=)/, `${world}=this;$1`);
     script = script.replace(/(\w+)\[\'config\'\]\[\'thirdPerson\'\]/g, `${getHack}("3rd Person").status`);
     //##############################################################################################################################################
