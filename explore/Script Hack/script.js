@@ -4,7 +4,7 @@
 // @author              ZaRes X [ZRX]
 // @description         Take over krunker
 // @version             2.4.7
-// @supportURL          http://youtube.com/zaresplusx
+// @supportURL          http://youtube.com/zaresx
 // @match               *://krunker.io/*
 // @grant               none
 // ==/UserScript==
