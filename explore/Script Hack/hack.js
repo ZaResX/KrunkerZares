@@ -11,9 +11,9 @@
 // Custom hub
 //Tells you if hack is working.
 alert("INJECTED ZaRes X Krunker Cheat")
-//################################################
+//###############################################################
 // Change the comments written below nibba with this "[Change**]"
-//################################################
+//###############################################################
 function randomName() {
     let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     var randomized = '';
