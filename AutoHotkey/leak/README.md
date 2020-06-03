@@ -10,3 +10,6 @@ __________________________________
 __________________________________
 >- You can use this hack in your YouTube videos as long you give credits.
 __________________________________
+>KRUNKER ZARES `v0.4` looks like this with a rgb background
+
+>![KRUNKER ZARES](https://user-images.githubusercontent.com/66065991/83607218-7e827880-a583-11ea-8d4f-2845401d8879.png)
