@@ -8,7 +8,7 @@ __________________________________
 __________________________________
 >Use this to open the `.AHK` files *https://www.autohotkey.com/* Thanks for using!
 __________________________________
->- You can use this hack in your YouTube videos as long you give credits.
+>- **You can use this hack in your YouTube videos as long you give credits.**
 __________________________________
 >**KRUNKER ZARES `v0.4`** looks like this with a rgb background
 
