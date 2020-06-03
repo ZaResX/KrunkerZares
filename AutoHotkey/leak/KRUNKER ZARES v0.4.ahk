@@ -781,7 +781,8 @@ Gui Main:default
 Gui, Show, w270 h133 x%xpos% y%ypos%, %WinTitle%
 return
 ;got some errors here D: Will be fixed in v0.5
-;ZaRes X has quited hacking but anyways you using this you need to give credits.
+;Made by ZaRes X
+;ZaRes X has quited hacking but anyways you using this you need to give credits if you make a youtube video about this cheato. 
 ;you will get copyright striked and a youtube unlike ride :D
 ;Thanks for the leak ZaRes X
 ;https://www.youtube.com/channel/UCLxuarUbS3qzUy2SpLf3WEg
