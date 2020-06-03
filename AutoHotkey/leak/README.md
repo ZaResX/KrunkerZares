@@ -10,15 +10,15 @@ __________________________________
 __________________________________
 >- You can use this hack in your YouTube videos as long you give credits.
 __________________________________
->KRUNKER ZARES `v0.4` looks like this with a rgb background
+>**KRUNKER ZARES `v0.4`** looks like this with a rgb background
 
 >![KRUNKER ZARES](https://user-images.githubusercontent.com/66065991/83607218-7e827880-a583-11ea-8d4f-2845401d8879.png)
 __________________________________
->KRUNKER ZARES HELP HAND`v0.1` looks like this
+>**KRUNKER ZARES HELP HAND`v0.1`** looks like this
 
 >![KRUNKER ZARES HELP HAND](https://user-images.githubusercontent.com/66065991/83607383-cdc8a900-a583-11ea-86df-a9bc732f14a3.png)
 __________________________________
->AIM ASSIST looks like this
+>**AIM ASSIST** looks like this
 
 >![AIM ASSIST](https://user-images.githubusercontent.com/66065991/83607460-f2248580-a583-11ea-9bf1-d20ee48398ee.png)
 __________________________________
