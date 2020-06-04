@@ -16,7 +16,8 @@ __________________________________
 - [AutoHotkey](https://github.com/ZaResX/KrunkerZares/tree/master/AutoHotkey)
 - [Krunker.io Client](https://github.com/ZaResX/KrunkerZares/tree/master/Client)
 __________________________________
-Best exploits ever! #ReBornZRX
-__________________________________
 >- **KRUNKER UNLIMITED FPS [CHROME](https://github.com/ZaResX/KrunkerZares/releases/download/0.0.0.1/krunker.unlimited.fps.bat)** 
+>- **KRUNKER UNLIMITED FPS [BRAVE](https://github.com/ZaResX/KrunkerZares/releases/download/0.1.0.1/krunker.unlimited.fps.bat)** 
+__________________________________
+Best exploits ever! #ReBornZRX
 __________________________________
