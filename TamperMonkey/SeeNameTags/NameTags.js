@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Krunker NameTags
-// @namespace    https://github.com/ZaResX/KrunkerZares/
-// @version      2.4.7
-// @description  Why am I able to see names through walls
-// @author       ZaRes X
+// @namespace    https://skidlamer.github.io/
+// @version      0.2
+// @description  self leak
+// @author       SkidLamer, fixed by chomler
 // @match        *://krunker.io/*
 // @run-at       document-start
 // @grant        none
@@ -11,27 +11,41 @@
 
 (function() {
     'use strict';
-    let initialize = function(data) {
-        let regex = /if\(!\w+\['(\w+)']\)continue/; //Hook
-        let result = regex.exec(data);
+    let inView
+    const initialize = function(data) {
+        let result = /if\(!\w+\['(\w+)']\)continue/.exec(data);
         if (result) {
-            const inView = result[1];
-            const push = Array.prototype.push;
-            Array.prototype.push = function(...args) {
-                push.apply(this, args);
-                if (args[0] instanceof Object && args[0].isPlayer) { //isPlayer is the value. If this get patched change isPlayer to new value to make it work
-                    Object.defineProperty(args[0], inView, {value: true, configurable: false});
-                }
-            }
+            inView = result[1];
         }
     }
-    const decode = window.TextDecoder.prototype.decode; 
-    window.TextDecoder.prototype.decode = function(...args) {
+    const decode = window.TextDecoder.prototype.decode;
+    const decodeHook = function(...args) {
         let data = decode.apply(this, args);
         if (data.length > 1050000) {
             initialize(data);
         }
         return data;
     }
+    const push = Array.prototype.push;
+    const pushHook = function(...args) {
+        push.apply(this, args);
+        if (inView) {
+            if (args[0] instanceof Object && args[0].isPlayer) {
+                Object.defineProperty(args[0], inView, {value: true, configurable: false});
+            }
+        }
+    }
+    window.Object.defineProperty = new Proxy(Object.defineProperty, {
+        apply(target, thisArg, argArray) {
+            argArray[2].configurable = true;
+            if (argArray[2].get && argArray[2].get.name.startsWith("get_")) {
+                if (argArray[1] === "decode")
+                    argArray[2].get =_=> decodeHook
+                else if (argArray[1] === "cpush")
+                    argArray[2].get =_=> pushHook
+            }
+            return target.apply(thisArg, argArray)
+        }
+    })
 })();
-// https://github.com/hrt/KrunkerBypass/blob/master/ArrayHook/esp.js
+//https://discord.com/channels/692606346645733396/701441000400224266/740498576567828492
