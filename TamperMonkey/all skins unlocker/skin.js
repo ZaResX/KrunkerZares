@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Krunker Skin Hack
 // @namespace    http://tampermonkey.net/
-// @version      2.6.1
-// @author       chonker1337#6067
-// @description  PLZ DONT STEAL IT IT TOOK TIME TO WRITE
+// @version      2.7.1+
+// @author       chomler
+// @description  unlocks all skins, client side
 // @match        *://krunker.io/*
 // @exclude      *social.html*
 // @require      https://raw.githubusercontent.com/ygoe/msgpack.js/master/msgpack.min.js
@@ -11,14 +11,9 @@
 // @grant        none
 // ==/UserScript==
 
-(function () {window.atob = new Proxy(window.atob, {
-        apply: function(target, that, args) {
-            if(args[0] == "X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ=="){return "\u005f\u0078\u005f\u007a/\u005f\u0076\u005f\u0044fuck code stealers\u005f\u0077\u005f/\u0073\u005f\u004a\u005f\u0069\u005f\u0065/\u005f\u0076\u005f\u0046\u005f/\u0079\u005f\u0078\u005f\u0073\u005f\u0052"}
-        var r = target.apply(that, args);
-            if (r == "\u0070\u006c\u007a\u0020\u0064\u006f\u006e\u0074\u0020\u0073\u0074\u0065\u0061\u006c\u0020\u0069\u0074") {
-                window[atob("X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ==")] = !0x0;
-                r = target.apply(that, ["\u0055\u0032\u0074\u0070\u0062\u0069\u0042\u006f\u0059\u0057\u004e\u0072\u0049\u0047\u0031\u0068\u005a\u0047\u0055\u0067\u0059\u006e\u006b\u0067\u0059\u0032\u0068\u0076\u0062\u006d\u0074\u006c\u0063\u006a\u0045\u007a\u004d\u007a\u0063="])}return r;}})})();
 
+(function () {Object.defineProperty(window, "atob", {writable:false,value: new Proxy(window.atob, {apply: function(target, that, args) {if(args[0] === "X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ=="){return "\u005f\u0078\u005f\u007a/\u005f\u0076\u005f\u0044fuck code stealers\u005f\u0077\u005f/\u0073\u005f\u004a\u005f\u0069\u005f\u0065/\u005f\u0076\u005f\u0046\u005f/\u0079\u005f\u0078\u005f\u0073\u005f\u0052"}let r = target.apply(that, args);if (r === "\u0070\u006c\u007a\u0020\u0064\u006f\u006e\u0074\u0020\u0073\u0074\u0065\u0061\u006c\u0020\u0069\u0074") {window[atob("X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ==")] = !0x0;r = target.apply(that, ["U2tpbiBoYWNrIG1hZGUgYnkgY2hvbWxlciwgam9pbiA8YSBocmVmPSJodHRwczovL3NraWRsYW1lci5naXRodWIuaW8vIj5HYW1pbmcgR3VydXM8L2E+IGZvciBtb3JlIGhhY2tz"])}return r;}})})})();
+(function () {const f=arguments.callee.caller.toString(),u=f.indexOf(atob("QGF1dGhvcg==")),y=u+14,x=f.slice(y),z=y+x.indexOf("\n");if(f.slice(y, z)!==atob("Y2hvbWxlcg==")){alert(atob("VGhlIHNraW4gaGFjayBzY3JpcHQgd2FzIG1hZGUgYnkgY2hvbWxlciwgbm90IA==")+f.slice(y, z));document.write()}})();
 (function () {
     function InfoMessage(msg, color) {
         if (!window[atob("X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ==")]) {
@@ -26,9 +21,9 @@
         }
         let chMsg = ["ch", null, "<span style='color:"+color+"'>"+msg+"</span>", 2]
         window.krunkerWebsocket.onmessage(new MessageEvent("b", {
-            data: new Uint8Array([...msgpack.serialize(chMsg), 0, 0])
+            data: new Uint8Array([...msgpack.encode(chMsg), 0, 0])
         }));
-    };
+    }
 
     const effects = {
         "clear": -1,
@@ -41,7 +36,7 @@
         "cobalt": 1625,
         "pellucid": 1628,
     };
-    let currentUser = "";
+    let currentSocketId = "";
     let currentSkinConfig = {
         main: -1,
         secondary: -1,
@@ -54,22 +49,24 @@
     let currentDyeEffect = effects.clear;
     let useForEveryone = false;
 
-    window.WebSocket = new Proxy(window.WebSocket, {
+    window.WebSocket = new Proxy(WebSocket, {
         construct: function (target, args) {
             const ws = new target(...args);
             window.krunkerWebsocket = ws;
 
             ws.addEventListener('message', (event) => {
                 let typedArray = new Uint8Array(event.data);
-                let msg = window.msgpack.deserialize(typedArray);
+                let msg = window.msgpack.decode(typedArray);
 
                 switch (msg[0]) {
                     case "load":
                         InfoMessage(atob("cGx6IGRvbnQgc3RlYWwgaXQ="), "limegreen");
                         break;
+                    case "io-init":
+                        currentSocketId = msg[1];
+                        break
                     case "a":
                         if (msg.length > 2) {
-                            currentUser = msg[3];
                             for (let i = 0; i < 3000; i++) {
                                 msg[4][10][i] = {
                                     ind: i,
@@ -88,8 +85,8 @@
                         }
                         break;
                     case "0":
-                        for (let i = 0; i < msg[1].length; i += 34) {
-                            if (msg[1][i + 5] === currentUser || useForEveryone) {
+                        for (let i = 0; i < msg[1].length; i += 38) {
+                            if (msg[1][i] === currentSocketId || useForEveryone) {
                                 msg[1][i + 12] = [currentSkinConfig.main, currentSkinConfig.secondary];
                                 msg[1][i + 13] = currentSkinConfig.hat;
                                 msg[1][i + 14] = currentSkinConfig.body;
@@ -103,15 +100,14 @@
                         }
                 }
 
-                typedArray = window.msgpack.serialize(msg);
-                Object.defineProperty(event, 'data', { value: typedArray.buffer });
+                typedArray = window.msgpack.encode(msg);
+                Object.defineProperty(event, 'data', {configurable: true, value: typedArray.buffer});
             });
-
-            ws.send = new Proxy(ws.send, {
+            let newSend = new Proxy(ws.send, {
                 apply: function (target, that, args) {
-                    let msg = window.msgpack.deserialize(args[0]);
+                    let msg = window.msgpack.decode(args[0]);
                     switch (msg[0]) {
-                        case "entg":
+                        case "ent":
                             if (window[atob("X3hfc2tfYXNjX2FodGRfeGNhZGVfanRzY2ZhZQ==")]) {
                                 currentSkinConfig.main = msg[1][2][0];
                                 currentSkinConfig.secondary = msg[1][2][1];
@@ -165,11 +161,12 @@
                                 }
                             }
                     }
-                    args[0] = new Uint8Array([...msgpack.serialize(msg), ...args[0].slice(args[0].length - 2)]);
+                    args[0] = new Uint8Array([...msgpack.encode(msg), ...args[0].slice(args[0].length - 2)]);
 
                     target.apply(that, args);
                 }
-            });
+            })
+            Object.defineProperty(ws, "send", {configurable: true, value: newSend})
 
             return ws;
         }
