@@ -1,60 +1,16 @@
 // ==UserScript==
-// @name         SkidFest Clear and Messy
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  try to take over the world!
-// @author       SkidLamer and you when you steal it
-// @match        https://krunker.io/*
+// @name SkidFest
+// @description A Player aid in the game Krunker.io!
+// @version 1.88
+// @author SkidLamer
+// @homepage https://skidlamer.github.io/
+// @match *.krunker.io/*
+// @exclude *krunker.io/social*
+// @updateURL https://skidlamer.github.io/js/Skidfest.user.js
+// @run-at document-start
+// @grant none
 // @noframes
-// @grant        none
-// @run-at       document-start
 // ==/UserScript==
-
-
-/*
-allow-forms: form submission is allowed
-allow-scripts: scripts are executed
-allow-same-origin: the iframe uses the same “origin” that the page, so it no longer faces to CORS mechanism restrictions (permission to use AJAX requests, localStorage, cookies…)
-allow-top-navigation: the iframe can navigate to its top-level browsing context
-allow-popups: you can open a new window/a popup
-allow-pointer-lock: the Pointer Lock API is operable
-Note that you can’t reauthorize plugins execution.
-
-For example, if your iframe needs to open a popup to a third service, and requires authentication to access this service, you’ll have to add these values:
-
-allow-popup
-allow-same-origin
-allow-forms (the restriction applies to the iframe, but also to elements resulting)
-allow-scripts	Allows to run scripts
-allow-top-navigation
-*/
-
-/*
-aimKey: {def: 221, val: 221}
-chatKey: {def: 13, val: 13}
-confirmKey: {def: 75, val: 75}
-crouchKey: {def: 16, val: 16}
-dropKey: {def: 90, val: 90}
-equipKey: {def: 67, val: 67}
-inspKey: {def: 88, val: 88}
-interactKey: {def: 71, val: 71}
-interactSecKey: {def: 72, val: 72}
-jumpKey: {def: 32, val: 32}
-meleeKey: {def: 81, val: 81}
-moveKeys: {def: Array(4), val: Array(4)}
-pListKey: {def: 18, val: 18}
-premiumKeys: {def: Array(4), val: Array(4)}
-primKey: {def: 84, val: 84}
-reloadKey: {def: 82, val: 82}
-sBoardKey: {def: 9, val: 9}
-shootKey: {def: 220, val: 220}
-sprayKey: {def: 70, val: 70}
-streakKeys: {def: Array(5), val: Array(5)}
-swapKey: {def: 69, val: 69}
-toggleKeys: {def: Array(6), val: Array(6)}
-voiceKey: {def: 86, val: 86}
-wepVisKey: {def: -1, val: -1}
-*/
 
 const isProxy = Symbol("isProxy");
 const original_Proxy = window.Proxy;
@@ -76,7 +32,10 @@ const original_fillRect = window.CanvasRenderingContext2D.prototype.fillRect;
 const original_fillText = window.CanvasRenderingContext2D.prototype.fillText;
 const original_strokeText = window.CanvasRenderingContext2D.prototype.strokeText;
 const original_restore = window.CanvasRenderingContext2D.prototype.restore;
+
 //original_Object.assign(console, { log:_=>{}, dir:_=>{}, groupCollapsed:_=>{}, groupEnd:_=>{} });
+/* eslint-disable no-caller, no-undef */
+
 class Utilities {
     constructor(script) {
         this.script = script;
@@ -158,7 +117,9 @@ class Utilities {
         this.css = {
             noTextShadows: `*, .button.small, .bigShadowT { text-shadow: none !important; }`,
             hideAdverts: `#aMerger, #endAMerger { display: none !important }`,
-            hideSocials: `.headerBarRight > .verticalSeparator, .imageButton { display: none }`
+            hideSocials: `.headerBarRight > .verticalSeparator, .imageButton { display: none }`,
+            cookieButton: `#onetrust-consent-sdk { display: none !important }`,
+            newsHolder: `#newsHolder { display: none !important }`,
         };
         this.spinTimer = 1800;
         this.skinConfig = {};
@@ -196,6 +157,10 @@ class Utilities {
 
     isDefined(object) {
         return !this.isType(object, "undefined") && object !== null;
+    }
+
+    isNative(fn) {
+        return (/^function\s*[a-z0-9_\$]*\s*\([^)]*\)\s*\{\s*\[native code\]\s*\}/i).test('' + fn)
     }
 
     getStatic(s, d) {
@@ -251,6 +216,18 @@ class Utilities {
                 html: () => this.generateSetting("checkbox", "hideMerch", this),
                 set: value => { window.merchHolder.style.display = value ? "none" : "inherit" }
             },
+            hideNewsConsole: {
+                name: "Hide News Console",
+                val: false,
+                html: () => this.generateSetting("checkbox", "hideNewsConsole", this),
+                set: value => { window.newsHolder.style.display = value ? "none" : "inherit" }
+            },
+            hideCookieButton: {
+                name: "Hide Security Manage Button",
+                val: false,
+                html: () => this.generateSetting("checkbox", "hideCookieButton", this),
+                set: value => { window['onetrust-consent-sdk'].style.display = value ? "none" : "inherit" }
+            },
             noTextShadows: {
                 name: "Remove Text Shadows",
                 val: false,
@@ -291,6 +268,11 @@ class Utilities {
                 name: "Player Tracers",
                 val: false,
                 html: () => this.generateSetting("checkbox", "renderTracers"),
+            },
+            rainbowColor: {
+                name: "Rainbow ESP",
+                val: false,
+                html: () => this.generateSetting("checkbox", "rainbowColor"),
             },
             renderChams: {
                 name: "Player Chams",
@@ -339,6 +321,15 @@ class Utilities {
                 val: false,
                 html: () => this.generateSetting("checkbox", "wallPenetrate"),
             },
+            weaponZoom: {
+				name: "Weapon Zoom",
+				val: 1.0,
+				min: 0,
+				max: 50.0,
+				step: 0.01,
+				html: () => this.generateSetting("slider", "weaponZoom"),
+				set: (value) => { if (this.renderer) this.renderer.adsFovMlt = value;}
+			},
             autoBhop: {
                 pre: "<br><div class='setHed'>Player</div>",
                 name: "Auto Bhop Type",
@@ -365,6 +356,11 @@ class Utilities {
                 val: false,
                 html: () => this.generateSetting("checkbox", "disableWpnSnd", this),
             },
+            autoActivateNuke: {
+                name: "Auto Activate Nuke",
+                val: false,
+                html: () => this.generateSetting("checkbox", "autoActivateNuke", this),
+            },
             autoFindNew: {
                 name: "New Lobby Finder",
                 val: false,
@@ -380,14 +376,6 @@ class Utilities {
                 val: true,
                 html: () => this.generateSetting("checkbox", "autoClick", this),
             },
-            aimSpeedMulti: {
-				name: "Aim Speed Multiplier",
-				val: 1,
-				min: 1,
-				max: 1.1,
-				step: 0.01,
-				html: () => this.generateSetting("slider", "aimSpeedMulti"),
-			},
             playStream: {
                 pre: "<br><div class='setHed'>Radio Stream Player</div>",
                 name: "Stream Select",
@@ -444,7 +432,7 @@ class Utilities {
 			},
 
             /*
-
+            Alternate Howler Sound
             playSound: {
                 name: "Sound Player",
                 val: "",
@@ -476,16 +464,16 @@ class Utilities {
         // Inject Html
         let waitForWindows = setInterval(_ => {
             if (window.windows) {
-                const menu = window.windows[21];
+                const menu = window.windows[11];
                 menu.header = "Settings";
                 menu.gen = _ => {
-                    var tmpHTML = `<div style='text-align:center'> <a onclick='window.open("https://skidlamer.github.io/")' class='menuLink'>GamingGurus Settings</center></a> <hr> </div>`;
+                    var tmpHTML = `<div style='text-align:center'> <a onclick='window.open("https://skidlamer.github.io/")' class='menuLink'>Gaming Gurus Settings</center></a> <hr> </div>`;
                     for (const key in this.settings) {
                         if (this.settings[key].pre) tmpHTML += this.settings[key].pre;
                         tmpHTML += "<div class='settName' id='" + key + "_div' style='display:" + (this.settings[key].hide ? 'none' : 'block') + "'>" + this.settings[key].name +
                             " " + this.settings[key].html() + "</div>";
                     }
-                    tmpHTML += `<br><hr><a onclick='window.utilities.resetSettings()' class='menuLink'>Reset Settings</a>`
+                    tmpHTML += `<br><hr><a onclick='window.utilities.resetSettings()' class='menuLink'>Reset Settings</a> | <a onclick='window.utilities.saveScript()' class='menuLink'>Save GameScript</a>`
                    /// tmpHTML += `<audio controls><source src='window.utilities.settings.playSound.sound.src'/></audio>`
                     return tmpHTML;
                 };
@@ -583,6 +571,10 @@ class Utilities {
         window.document.body.removeChild(el);
     }
 
+    saveScript() {
+        this.saveAs("game_" + this.getVersion() + ".js", this.script)
+    }
+
     isKeyDown(key) {
         return this.downKeys.has(key);
     }
@@ -619,7 +611,7 @@ class Utilities {
     toggleMenu() {
         let lock = document.pointerLockElement || document.mozPointerLockElement;
         if (lock) document.exitPointerLock();
-        window.showWindow(22);
+        window.showWindow(12);
         if (this.isDefined(window.SOUND)) window.SOUND.play(`tick_0`,0.1)
     }
 
@@ -647,7 +639,9 @@ class Utilities {
             if ('INPUT' == document.activeElement.tagName || !window.endUI && window.endUI.style.display) return;
             switch (event.code) {
                 case 'NumpadSubtract':
-                    console.dir(this)
+                    document.exitPointerLock();
+                   //console.log(document.exitPointerLock)
+                    console.dirxml(this)
                     break;
                 default:
                     if (!this.downKeys.has(event.code)) this.downKeys.add(event.code);
@@ -670,13 +664,14 @@ class Utilities {
             if (!exports) return alert("Exports not Found");
             const found = new Set();
             const array = new Map([
-                ["utility", ["getAnglesSSS", "rgbToHex"]],
+                ["utility", ["boxCornerIntersection", "getAngleDist2", "extractProperties", "formatConstName"]],
                 ["config", ["serverTickRate", "camChaseTrn", "cameraHeight", "hitBoxPad"]],
                 ["overlay", ["render", "canvas"]],
                 ["three", ["ACESFilmicToneMapping", "TextureLoader", "ObjectLoader"]],
-                ["colors", ["challLvl", "getChallCol"]],
-                ["ui", ["showEndScreen", "toggleControlUI", "toggleEndScreen", "updatePlayInstructions"]],
-                ["ws", ["sendQueue"]],
+                //["colors", ["challLvl", "getChallCol"]],
+                //["ui", ["showEndScreen", "toggleControlUI", "toggleEndScreen", "updatePlayInstructions"]],
+                ["ws", ["socketReady", "ingressPacketCount", "ingressPacketCount", "egressDataSize"]],
+                //["events", ["actions", "events"]],
             ])
             return this.waitFor(_ => found.size === array.size, 20000, () => {
                 array.forEach((arr, name, map) => {
@@ -691,9 +686,10 @@ class Utilities {
                 })
             })
         })
-        //e.stack = e.stack.replace(/\n.*Object\.apply.*/, '');
 
         this.waitFor(_=>this.ws.connected === true, 40000).then(_=> {
+            this.ws.__event = this.ws._dispatchEvent.bind(this.ws);
+            this.ws.__send = this.ws.send.bind(this.ws);
             this.ws.send = new original_Proxy(this.ws.send, {
                 apply(target, that, args) {
                     try {
@@ -701,6 +697,11 @@ class Utilities {
                     } catch (e) {
                         e.stack = e.stack = e.stack.replace(/\n.*Object\.apply.*/, '');
                         throw e;
+                    }
+
+                    if (args[0] === "ahl") {
+                        args[0] = "p";
+                        args[1] = null;
                     }
 
                     if (args[0] === "ent") {
@@ -715,12 +716,12 @@ class Utilities {
                         }
                     }
                     return original_fn;
-                   // return target.apply(thisArg, msg);
+                   // return target.apply(that, msg);
                 }
             })
 
             this.ws._dispatchEvent = new original_Proxy(this.ws._dispatchEvent, {
-                apply(target, thisArg, [type, msg]) {
+                apply(target, that, [type, msg]) {
                     //console.log(type, msg)
                     if (type =="init") {
                         if(msg[9].bill && window.utilities.settings.customBillboard.val.length > 1) {
@@ -742,11 +743,11 @@ class Utilities {
                             }
                         }
                     }
-                    return target.apply(thisArg, arguments[2]);
+                    return target.apply(that, arguments[2]);
                 }
             })
 
-            const skins = Symbol("SkinUnlock")
+            const skins = Symbol("SkinUnlock") /*chonker*/
             original_Object.defineProperty(original_Object.prototype, "skins", {
                 enumerable: false,
                 get() {
@@ -806,7 +807,14 @@ class Utilities {
        //     apply: function(target, that, [value, startTime]) {
        //         return target.apply(that, [value / 100, startTime+1]);
         //    }
-       // })
+        // })
+
+        AudioParam.prototype.setValueAtTime = new Proxy(AudioParam.prototype.setValueAtTime, {
+            apply: function(target, that, [value, startTime]) {
+                return target.apply(that, [value, 0]);
+            }
+        })
+
     }
 
     patchScript() {
@@ -814,15 +822,15 @@ class Utilities {
         .set("exports", [/(function\(\w,\w,(\w)\){)'use strict';(\(function\((\w)\){)\//, `$1$3 window.utilities.exports=$2.c; window.utilities.modules=$2.m;/`])
         //.set("exports", [/(function\(\w+,\w+,(\w+)\){\(function\(\w+\){)(\w+\['exports'])/,`$1window.utilities.exports=$2.c; window.utilities.modules=$2.m;$3`])
         .set("inView", [/if\((!\w+\['\w+'])\)continue;/, "if($1&&void 0 !== window.utilities.nameTags)continue;"])
-        .set("inputs", [/(\w+\['tmpInpts']\[\w+\['tmpInpts']\['\w+']\?'\w+':'push']\()(\w+)/, `$1window.utilities.onInput($2)`])
+        .set("inputs", [/(\w+\['\w+']\[\w+\['\w+']\['\w+']\?'\w+':'push']\()(\w+)\),/, `$1window.utilities.onInput($2)),`])
         //.set("procInputs", [/this\['meleeAnim']\['armS']=0x0;},this\['\w+']=function\((\w+),\w+,\w+,\w+\){/, `$&window.cheat.onInput($1);`])
         //.set("wallBangs", [/!(\w+)\['transparent']/, "$&& (!cheat.settings.wallbangs || !$1.penetrable )"])
         .set("thirdPerson", [/(\w+)\[\'config\'\]\[\'thirdPerson\'\]/g, `void 0 !== window.utilities.thirdPerson`])
         //.set("onRender", [/\w+\['render']=function\((\w+,\w+,\w+,\w+,\w+,\w+,\w+,\w+)\){/, `$&window.cheat.onRender($1);`])
-        .set("isHacker", [/(window\['activeHacker']=)!0x0/, `$1!0x1`])
+        .set("isHacker", [/(window\['\w+']=)!0x0\)/, `$1!0x1)`])
         .set("Damage", [/\['send']\('vtw',(\w+)\)/, `['send']('kpd',$1)`])
         .set("fixHowler", [/(Howler\['orientation'](.+?)\)\),)/, ``])
-        .set("respawnT", [/'respawnT':0x3e8/g, `'respawnT':0x0`])
+        .set("respawnT", [/'\w+':0x3e8\*/g, `'respawnT':0x0*`])
         //.set("FPS", [/(window\['mozRequestAnimationFrame']\|\|function\(\w+\){window\['setTimeout'])\(\w+,0x3e8\/0x3c\);/, "$1()"])
         //.set("Update", [/(\w+=window\['setTimeout']\(function\(\){\w+)\((\w+)\+(\w+)\)/, "$1($2=$3=0)"])
        // .set("weaponZoom", [/(,'zoom':)(\d.+?),/g, "$1window.utilities.settings.weaponZoom.val||$2"])
@@ -871,19 +879,19 @@ class Utilities {
             didShoot: { regex: /--,\w+\['(\w+)']=!0x0/, pos: 1 },
             nAuto: { regex: /'Single\\x20Fire','varN':'(\w+)'/, pos: 1 },
             crouchVal: { regex: /this\['(\w+)']\+=\w\['\w+']\*\w+,0x1<=this\['\w+']/, pos: 1 },
-            recoilAnimY: { regex: /this\['(\w+)']=0x0,this\['recoilForce']=0x0/, pos: 1 },
+            recoilAnimY: { regex: /\+\(-Math\['PI']\/0x4\*\w+\+\w+\['(\w+)']\*\w+\['\w+']\)\+/, pos: 1 },
             //recoilAnimY: { regex: /this\['recoilAnim']=0x0,this\[(.*?\(''\))]/, pos: 1 },
             ammos: { regex: /\['length'];for\(\w+=0x0;\w+<\w+\['(\w+)']\['length']/, pos: 1 },
             weaponIndex: { regex: /\['weaponConfig']\[\w+]\['secondary']&&\(\w+\['(\w+)']==\w+/, pos: 1 },
             isYou: { regex: /0x0,this\['(\w+)']=\w+,this\['\w+']=!0x0,this\['inputs']/, pos: 1 },
-            objInstances: { regex: /\w+\['genObj3D']\(0x0,0x0,0x0\);if\(\w+\['(\w+)']=\w+\['genObj3D']/, pos: 1 },
+            objInstances: { regex: /\w+\['\w+']\(0x0,0x0,0x0\);if\(\w+\['(\w+)']=\w+\['\w+']/, pos: 1 },
             getWorldPosition: { regex: /{\w+=\w+\['camera']\['(\w+)']\(\);/, pos: 1 },
             //mouseDownL: { regex: /this\['\w+'\]=function\(\){this\['(\w+)'\]=\w*0,this\['(\w+)'\]=\w*0,this\['\w+'\]={}/, pos: 1 },
             mouseDownR: { regex: /this\['(\w+)']=0x0,this\['keys']=/, pos: 1 },
-            reloadTimer: { regex:  /this\['(\w+)']-=\w+,\w+\['reloadUIAnim']/, pos: 1 },///this\['(\w+)']&&\(this\['noMovTimer']=0x0/, pos: 1 },
+            //reloadTimer: { regex:  /this\['(\w+)']-=\w+,\w+\['reloadUIAnim']/, pos: 1 },///this\['(\w+)']&&\(this\['noMovTimer']=0x0/, pos: 1 },
             maxHealth: { regex: /this\['health']\/this\['(\w+)']\?/, pos: 1 },
-            xDire: { regex: /this\['(\w+)']=\w+\['round']\(0x3\),this\['(\w+)']=\w+\['round']/, pos: 1 },
-            yDire: { regex: /this\['(\w+)']=\w+\['round']\(0x3\),this\['(\w+)']=\w+\['round']/, pos: 2 },
+            xDire: { regex: /this\['(\w+)']=Math\['lerpAngle']\(this\['xDir2']/, pos: 1 },
+            yDire: { regex: /this\['(\w+)']=Math\['lerpAngle']\(this\['yDir2']/, pos: 1 },
             //xVel: { regex: /this\['x']\+=this\['(\w+)']\*\w+\['map']\['config']\['speedX']/, pos: 1 },
             yVel: { regex: /this\['y']\+=this\['(\w+)']\*\w+\['map']\['config']\['speedY']/, pos: 1 },
             //zVel: { regex: /this\['z']\+=this\['(\w+)']\*\w+\['map']\['config']\['speedZ']/, pos: 1 },
@@ -913,6 +921,26 @@ class Utilities {
         let worldPosition = this.renderer.camera[this.vars.getWorldPosition]();
         let espVal = this.settings.renderESP.val;
         if (espVal ==="walls"||espVal ==="twoD") this.nameTags = undefined; else this.nameTags = true;
+
+        if (this.isNative(this.renderer.frustum.containsPoint)) {
+            this.renderer.frustum.containsPoint = function (point) {
+                let planes = this.planes;
+                for (let i = 0; i < 6; i ++) {
+                    if (planes[i].distanceToPoint(point) < 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        if (this.settings.autoActivateNuke.val && this.me && Object.keys(this.me.streaks).length) { /*chonker*/
+            this.ws.__send("k", 0);
+        }
+
+        if (espVal !== "off") {
+            this.overlay.healthColE = this.settings.rainbowColor.val ? this.overlay.rainbow.col : "#eb5656";
+        }
 
         for (let iter = 0, length = this.game.players.list.length; iter < length; iter++) {
             let player = this.game.players.list[iter];
@@ -974,7 +1002,7 @@ class Utilities {
                 this.ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
                 this.ctx.stroke();
                 this.ctx.lineWidth = 2.5;
-                this.ctx.strokeStyle = "#FF0000";
+                this.ctx.strokeStyle = this.settings.rainbowColor.val ? this.overlay.rainbow.col : "#eb5656"
                 this.ctx.stroke();
                 original_restore.apply(this.ctx, []);
             }
@@ -983,7 +1011,7 @@ class Utilities {
             if (espVal == "twoD" || espVal == "full") {
                 // perfect box esp
                 this.ctx.lineWidth = 5;
-                this.ctx.strokeStyle = 'rgba(255,50,50,1)';
+                this.ctx.strokeStyle = this.settings.rainbowColor.val ? this.overlay.rainbow.col : "#eb5656"
                 let distanceScale = Math.max(.3, 1 - this.getD3D(worldPosition.x, worldPosition.y, worldPosition.z, player.x, player.y, player.z) / 600);
                 original_scale.apply(this.ctx, [distanceScale, distanceScale]);
                 let xScale = scaledWidth / distanceScale;
@@ -1046,16 +1074,13 @@ class Utilities {
                     let chamsEnabled = chamColor !== "off";
                     if (child && child.type == "Mesh" && child.material) {
                         child.material.depthTest = chamsEnabled ? false : true;
-                        //child.material.opacity = chamsEnabled ? 0.85 : 1.0;
-                        //child.material.transparent = true;//chamsEnabled ? true : false;
-                        child.material.fog = chamsEnabled ? false : true;
-                        if (child.material.emissive) {
-                            child.material.emissive.r = chamColor == 'off' || chamColor == 'teal' || chamColor == 'green' || chamColor == 'blue' ? 0 : 0.55;
-                            child.material.emissive.g = chamColor == 'off' || chamColor == 'purple' || chamColor == 'blue' || chamColor == 'red' ? 0 : 0.55;
-                            child.material.emissive.b = chamColor == 'off' || chamColor == 'yellow' || chamColor == 'green' || chamColor == 'red' ? 0 : 0.55;
-                        }
-
-                        child.material.wireframe = this.settings.renderWireFrame.val ? true : false
+                      if (this.isDefined(child.material.fog)) child.material.fog = chamsEnabled ? false : true;
+                      if (child.material.emissive) {
+                          child.material.emissive.r = chamColor == 'off' || chamColor == 'teal' || chamColor == 'green' || chamColor == 'blue' ? 0 : 0.55;
+                          child.material.emissive.g = chamColor == 'off' || chamColor == 'purple' || chamColor == 'blue' || chamColor == 'red' ? 0 : 0.55;
+                          child.material.emissive.b = chamColor == 'off' || chamColor == 'yellow' || chamColor == 'green' || chamColor == 'red' ? 0 : 0.55;
+                      }
+                      child.material.wireframe = this.settings.renderWireFrame.val ? true : false
                     }
                 })
             }
@@ -1077,102 +1102,6 @@ class Utilities {
         for (var e = 0, i = 0; i < this.spins.length; ++i) e += this.spins[i];
         return Math.abs(e * (180 / Math.PI));
     }
-
-    /*
-    IsEO8: 10000
-actionFreq: 0
-active: true
-alwaysName: true
-assetID: ""
-atkSound: 0
-behavType: 0
-behaviour: 1
-bobD: 0.2
-bobS: 0.004
-bobVal: 39.56399999999977
-breakAttack: 0
-breakMove: 0
-breakTimer: 0
-canBSeen: false
-canHit: false
-canShoot: false
-changeHealth: ƒ (m,o,p)
-collides: ƒ (m)
-dat: {health: 10000, mSize: 14, asset: 0, idl: 3206, src: "ghost_0"}
-deathSound: 0
-emitSound: ƒ (m,o,p,q,u)
-fireRate: 2000
-frameRT: 0
-frames: 2
-getData: ƒ ()
-gravity: 0
-health: 10000
-hitDMG: 25
-hitRange: 10
-hitRate: 800
-hitTimer: 0
-idlSoundI: 5000
-idlSoundT: 1335.048101081532
-idleSound: 3206
-index: 0
-init: ƒ (m,q,u,v,w,x,y)
-interface: undefined
-interfaceT: undefined
-isAI: true
-kill: ƒ (m)
-arguments: null
-caller: null
-length: 1
-name: ""
-prototype: {constructor: ƒ}
-skins: (...)
-__proto__: ƒ ()
-[[FunctionLocation]]: VM4821:31
-[[Scopes]]: Scopes[4]
-killScore: 0
-lastFrame: 0
-mesh: fI {uuid: "8EA60AE3-B338-46A6-B372-641CAA8602EF", name: "", type: "Object3D", parent: jU, children: Array(1), …}
-meshRef: h1 {uuid: "AC07BE32-1DA3-4BE3-ACF1-B34771A7341D", name: "", type: "Mesh", parent: fI, children: Array(0), …}
-name: "Weeping Soul"
-projType: 0
-respawnR: false
-respawnT: 0
-reward: undefined
-rotY: undefined
-scale: 14
-sentTo: []
-shootTimer: 2000
-shotOff: 2
-shotSprd: 0.02
-sid: 1
-singleUse: undefined
-spawnCap: 20
-spawnMTim: 0
-specAtkTim: 0
-specAtkTim2: 0
-speed: 0
-startP: {x: 326, y: 8, z: 0}
-tFrame: 0
-target: null
-triggerAction: undefined
-triggerChance: undefined
-triggerConstant: undefined
-triggerConstantEvent: 0
-triggerConstantTxt: undefined
-triggerSound: (5) [undefined, undefined, undefined, undefined, undefined]
-turnSpd: 0
-update: ƒ (q)
-usedSpecial: false
-vision: 120
-x: 326
-xD: 2872.99
-xray: false
-y: 8
-yD: 2871.42
-z: 0
-skins: (...)
-__proto__: Object
-*/
 
     raidBot(input) {
         const key = { frame: 0, delta:1,ydir:2,xdir:3,moveDir:4,shoot:5,scope:6,jump:7,crouch:8,reload:9,weaponScroll:10,weaponSwap:11, moveLock:12}
@@ -1202,10 +1131,8 @@ __proto__: Object
     }
 
     onInput(input) {
-
-        //this.game.config.deltaMlt = 1.5
-
         const key = { frame: 0, delta:1,ydir:2,xdir:3,moveDir:4,shoot:5,scope:6,jump:7,crouch:8,reload:9,weaponScroll:10,weaponSwap:11, moveLock:12}
+        if (this.isDefined(this.config) && this.config.aimAnimMlt) this.config.aimAnimMlt = 1;
         if (this.isDefined(this.controls) && this.isDefined(this.config) && this.settings.inActivity.val) {
             this.controls.idleTimer = 0;
             this.config.kickTimer = Infinity
@@ -1213,6 +1140,7 @@ __proto__: Object
         if (this.me) {
             this.inputFrame ++;
             if (this.inputFrame >= 100000) this.inputFrame = 0;
+            /*
             if (!this.game.decreaseWeapon[isProxy]) {
                 this.game.decreaseWeapon = new original_Proxy(this.game.decreaseWeapon, {
                     apply: function(target, that, args) {
@@ -1234,7 +1162,7 @@ __proto__: Object
                         return key === isProxy ? true : Reflect.get(target, key);
                     },
                 })
-            }
+            }*/
 
             if (!this.game.playerSound[isProxy]) {
                 this.game.playerSound = new original_Proxy(this.game.playerSound, {
@@ -1247,27 +1175,6 @@ __proto__: Object
                     },
                 })
             }
-
-            if (this.me.streak && this.me.streak % 25 === 0) {
-                this.game.streaks[0].activate()
-            }
-
-            //if (this.streakCount == void 0) this.streakCount = document.querySelector("#streakVal");
-            //else if (this.streakCount.innerText == "25") {
-            //    let nukeKey = this.controls.binds.streakKeys.val[0];
-        //  .      this.controls.keys[nukeKey] = 1;
-        //        this.controls.didPressed[nukeKey] = 1;
-         //   }
-               // let nukeKey = 32//this.controls.binds.streakKeys.val[0];
-                //this.simulateKey(nukeKey, "keydown");
-               // this.simulateKey(nukeKey, "keyup");
-               // if (this.game.nukeTimer) this.game.nukeTimer = 0;
-               // this.controls.keys[nukeKey] = 1;
-               // this.controls.didPressed[nukeKey] = 1;
-               // this.game.incStat("n", this.me);
-               // this.game.startNuke(this.me);
-              //  this.me.nukes++;
-            //}
 
             // autoReload
             if (this.settings.autoReload.val) {
@@ -1290,13 +1197,6 @@ __proto__: Object
             }
 
             //Auto Bhop
-           //this.config.isProd =false
-            //  this.config.inNode = true
-            //this.controls.speedLmt = 1.1;
-            //this.config.dltMx = 66;
-            this.config.marketFeeBypass = 1;
-            this.config.marketMinLVl = 1;
-
             let autoBhop = this.settings.autoBhop.val;
             if (autoBhop !== "off") {
                 if (this.isKeyDown("Space") || autoBhop == "autoJump" || autoBhop == "autoSlide") {
@@ -1312,38 +1212,20 @@ __proto__: Object
                             this.controls.keys[this.controls.binds.crouchKey.val] = 1;
                             this.controls.didPressed[this.controls.binds.crouchKey.val] = 1;
                         }
-                    }//airTime
+                    }
                 }
             }
 
             //Autoaim
-            if (this.inputFrame % 2 == 0) {
-                this.me.weapon.spdMlt = this.settings.aimSpeedMulti.val
-            }
-
             if (this.settings.autoAim.val !== "off") {
-                //if (this.inputFrame % 50 == 0) {
-               // this.me.weapon.spdMlt = this.settings.aimSpeedMulti.val||1
-                    //this.me.weapon.spdMlt = this.settings.speedMulti.val||1
-                    //this.game.config.deltaMlt = this.settings.speedMulti.val||1
-                //} else {
-                //    this.me.weapon.spdMlt = 1
-                //    this.game.config.deltaMlt = 1
-                //}
-
                 let target = this.game.players.list.filter(enemy => {
                     return undefined !== enemy[this.vars.objInstances] && enemy[this.vars.objInstances] && !enemy[this.vars.isYou] && !this.getIsFriendly(enemy) && enemy.health > 0 && this.getInView(enemy)
                 }).sort((p1, p2) => this.getD3D(this.me.x, this.me.z, p1.x, p1.z) - this.getD3D(this.me.x, this.me.z, p2.x, p2.z)).shift();
                 if (target) {
-                   // this.ws.sendQueue.push(this.me.id, "am", ["Purchased", null]);
-                   // this.game.players.score(this.me, 0, 0, 1);
                     //let count = this.spinTick(input);
                     //if (count < 360) {
                     //    input[2] = this.me[this.vars.xDire] + Math.PI;
                     //} else console.log("spins ", count);
-                    //this.me[this.vars.yDire] = (this.getDir(this.me.z, this.me.x, target.z, target.x) || 0)
-                    //this.me[this.vars.xDire] = ((this.getXDire(this.me.x, this.me.y, this.me.z, target.x, target.y + 100, target.z) || 0) - this.consts.recoilMlt * this.me[this.vars.recoilAnimY])
-
 
                     let canSee = this.renderer.frustum.containsPoint(target[this.vars.objInstances].position);
                     let yDire = (this.getDir(this.me.z, this.me.x, target.z, target.x) || 0)
@@ -1456,11 +1338,13 @@ __proto__: Object
                 if (tmpDst && 1 > tmpDst) return tmpDst;
             }
         }
-        //let terrain = this.game.map.terrain;
-       // if (terrain) {
-       //     let terrainRaycast = terrain.raycast(from.x, -from.z, yOffset, 1 / dx, -1 / dz, 1 / dy);
-        //    if (terrainRaycast) return this.getD3D(from.x, from.y, from.z, terrainRaycast.x, terrainRaycast.z, -terrainRaycast.y);
-        //}
+        /*
+        let terrain = this.game.map.terrain;
+        if (terrain) {
+            let terrainRaycast = terrain.raycast(from.x, -from.z, yOffset, 1 / dx, -1 / dz, 1 / dy);
+            if (terrainRaycast) return this.getD3D(from.x, from.y, from.z, terrainRaycast.x, terrainRaycast.z, -terrainRaycast.y);
+        }
+        */
         return null;
     }
 
@@ -1517,134 +1401,88 @@ __proto__: Object
 }
 
 (function() {
-    var iframe, iframeWin, iframeDoc, script;
-    iframe = document.createElement("iframe");
-    iframe.src = location.origin;//href;
-    //iframe.sandbox = "allow-same-origin";// "allow-same-origin", "allow-scripts"};
-    iframe.style.display = 'none';
-    document.documentElement.appendChild(iframe);
-    iframeWin = iframe.contentWindow;
-    iframeDoc = iframe.contentDocument || iframeWin.document;
-    //script = document.createElement("script");
-    //script.innerHTML = Haxx.toString().concat("window.haxx = new Haxx()");
-    //iframeDoc.documentElement.append(script);
-    //iframeDoc.documentElement.remove(script);
-
-    iframeWin.fetch = new original_Proxy(original_fetch, {
-        apply(target, that, [url, opt]) {
-            const initWASM = function(module){module.onRuntimeInitialized();};
-            //if (url.startsWith("/pkg/maindemo.wasm")) return new original_Promise(resolve => resolve(null));
-            if (url.startsWith("/pkg/maindemo.js")) {
-                original_Function.prototype.apply.apply(target, [that, [url, opt]]).then(res => console.log(res));
-                return new original_Promise(resolve => resolve({text:_=>`window.initWASM = ${initWASM.toString()}`}));
-            }
-            if (!url.startsWith("seek-game", 30)) { console.log(url); return original_Function.prototype.apply.apply(target, [that, [url, opt]]); }
-           // else {
-          //      try {
-                    //new original_Promise(resolve => resolve(decodeURIComponent(/Token=(.+)&data/.exec(url)[1]))).then(token => { console.log("token:",token); return tokenPromise(token) });
-              //      new original_Promise(resolve => resolve(decodeURIComponent(/Token=(.+)&data/.exec(url)[1]))).then(token => { console.log("token:",token); return tokenPromise(token, {csv:_=>new Promise.resolve(0)}) });
-
-            //    } catch(e) {
-             //       console.error(e.stack);
-             //   }
-           // }
-        }
-    })
-
-    window.Function = new original_Proxy(original_Function, {
-        construct(target, args) {
-            const that = new target(...args);
-            if (args.length) {
-                let string = args[args.length - 1];
-
-                if (string.length > 38e5) {
-                    window.utilities = new Utilities(string);
-                    string = window.utilities.patchScript();
+    //'use strict';
+    let initialize = function() {
+        window._debugTimeStart = Date.now();
+        fetch(location.origin+"/pkg/maindemo.wasm", {
+            cache: "no-store"
+        }).then(res=>res.arrayBuffer()).then(buff=>{
+            window.mod.wasmBinary = buff;
+            fetch(location.origin+"/pkg/maindemo.js", {
+                cache: "no-store"
+            }).then(res=>res.text()).then(body=>{
+                body = body.replace(/(function UTF8ToString\((\w+),\w+\)){return \w+\?(.+?)\}/, `$1{let str=$2?$3;if (str.includes("CLEAN_WINDOW") || str.includes("Array.prototype.filter = undefined")) return "";return str;}`);
+                body = body.replace(/(_emscripten_run_script\(\w+\){)eval\((\w+\(\w+\))\)}/, `$1 let str=$2; console.log(str);}`);
+                //body = body.replace(/return (UTF8Decoder\.decode\(heap.subarray\(idx,endPtr\)\))/, `let outStr = $1; if (outStr.startsWith("var vrtInit"))outStr = window.mod.patchScript(outStr);else console.log(outStr); return outStr`);
+                //body = body.replace(/return (stringToUTF8Array\(str,HEAPU8,outPtr,maxBytesToWrite\))/, `if(str.length>4e6)str = window.mod.patchScript(str);else console.log(str); return $1`);
+                //body = body.replace(/(function UTF8ToString\((\w+),\w+\)){return \w+\?(.+?)\}/, `$1{let str=$2?$3;if (str.includes("CLEAN_WINDOW") || str.includes("Array.prototype.filter = undefined")) return "";else if (str.startsWith("var vrtInit")) str = window.mod.patchScript(str);return str;}`);
+                new Function(body)();
+                window.initWASM(window.mod);
+                window.mod.onRuntimeInitialized = async function(){
+                    "undefined" != typeof TextEncoder && "undefined" != typeof TextDecoder ? await this.initialize(this) : this.errorMsg("Your browser is not supported.")
                 }
+            })
+        });
 
-                // If changed return with spoofed toString();
-                if (args[args.length - 1] !== string) {
-                    args[args.length - 1] = string;
-                    let patched = new target(...args);
-                    patched.toString = () => that.toString();
-                    return patched;
-                }
-            }
-            return that;
-        }
-    })
+        window.Function = new Proxy(Function, {
+            construct(target, args) {
+                const that = new target(...args);
+                if (args.length) {
+                    let string = args[args.length - 1];
 
-    CanvasRenderingContext2D.prototype.clearRect = function(x, y, width, height) {
-        original_clearRect.apply(this, [x, y, width, height]);
-        if (void 0 !== window.utilities) window.utilities.ctx = this;
-        (function() {
-            const caller = arguments.callee.caller.caller;
-            if (caller) {
-                const renderArgs = caller.arguments;
-                if (renderArgs && void 0 !== window.utilities && window.utilities) {
-                    ["scale", "game", "controls", "renderer", "me"].forEach((item, index)=>{
-                        window.utilities[item] = renderArgs[index];
-                    });
-                    if (renderArgs[4]) {
-                        window.utilities.onRender();
-                        //window.requestAnimationFrame.call(window, renderArgs.callee.caller.bind(this));
+                    if (string.length > 38e5) {
+                        window.utilities = new Utilities(string);
+                        string = window.utilities.patchScript();
                     }
-                    if(window.utilities.settings && window.utilities.settings.autoClick.val && window.endUI.style.display == "none" && window.windowHolder.style.display == "none") {
-                        renderArgs[2].toggle(true);
+
+                    // If changed return with spoofed toString();
+                    if (args[args.length - 1] !== string) {
+                        args[args.length - 1] = string;
+                        let patched = new target(...args);
+                        patched.toString = () => that.toString();
+                        return patched;
                     }
                 }
+                return that;
             }
-        })();
+        })
+
+        CanvasRenderingContext2D.prototype.clearRect = function(x, y, width, height) {
+            original_clearRect.apply(this, [x, y, width, height]);
+            if (void 0 !== window.utilities) window.utilities.ctx = this;
+            (function() {
+                const caller = arguments.callee.caller.caller;
+                if (caller) {
+                    const renderArgs = caller.arguments;
+                    if (renderArgs && void 0 !== window.utilities && window.utilities) {
+                        ["scale", "game", "controls", "renderer", "me"].forEach((item, index)=>{
+                            window.utilities[item] = renderArgs[index];
+                        });
+                        if (renderArgs[4]) {
+                            window.utilities.onRender();
+                            //window.requestAnimationFrame.call(window, renderArgs.callee.caller.bind(this));
+                        }
+                        if(window.utilities.settings && window.utilities.settings.autoClick.val && window.endUI.style.display == "none" && window.windowHolder.style.display == "none") {
+                            renderArgs[2].toggle(true);
+                        }
+                    }
+                }
+            })();
+        }
     }
-
     let observer = new MutationObserver(mutations => {
         for (let mutation of mutations) {
             for (let node of mutation.addedNodes) {
                 if (node.tagName === 'SCRIPT' && node.type === "text/javascript" && node.innerHTML.startsWith("*!", 1)) {
-                    node.innerHTML = `!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o=t[r]={i:r,l:!1,exports:{}};return e[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)n.d(r,o,function(t){return e[t]}.bind(null,o));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="",n(n.s=0)}([function(e,t){var n={onRuntimeInitialized:function(){function e(e){instructionHolder.style.display="block",instructions.innerHTML="<div style='color: rgba(255, 255, 255, 0.6)'>"+e+"</div><div style='margin-top:10px;font-size:20px;color:rgba(255,255,255,0.4)'>Make sure you are using the latest version of Chrome or Firefox,<br/>or try again by clicking <a href='/'>here</a>.</div>",instructionHolder.style.pointerEvents="all"}(async function(){"undefined"!=typeof TextEncoder&&"undefined"!=typeof TextDecoder?await n.initialize(n):e("Your browser is not supported.")})().catch(t=>{e("Failed to load game.")})}};window._debugTimeStart=Date.now(),fetch("/pkg/maindemo.wasm",{cache:"no-store"}).then(e=>e.arrayBuffer()).then(e=>{n.wasmBinary=e,fetch("/pkg/maindemo.js",{cache:"no-store"}).then(e=>e.text()).then(e=>{new Function(e)(),initWASM(n)})})}]);`
-                    //node.innerHTML = atob("ZmV0Y2goImh0dHBzOi8va3J1bmtlci5pby9zb2NpYWwuaHRtbCIpLnRoZW4oZT0+ZS50ZXh0KCkpLnRoZW4oZT0+ZmV0Y2goImh0dHBzOi8va3J1bmtlci5pby9wa2cva3J1bmtlci4iKy9cdy5leHBvcnRzPSIoXHcrKSIvLmV4ZWMoZSlbMV0rIi52cmllcyIpKS50aGVuKGU9PmUuYXJyYXlCdWZmZXIoKSkudGhlbihlPT5uZXcgVWludDhBcnJheShlKSkudGhlbihlPT4obmV3IFRleHREZWNvZGVyKS5kZWNvZGUoZS5tYXAodD0+dF5lWzBdXiIhIi5jaGFyQ29kZUF0KDApKSkpLnRoZW4oZT0+bmV3IEZ1bmN0aW9uKCJfX0xPQURFUl9fbW1Ub2tlblByb21pc2UiLGUpKHdpbmRvdy5tbVRva2VuUHJvbWlzZSkpOw==");
+                    node.innerHTML = `!function(e){var t={};function r(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)r.d(n,o,function(t){return e[t]}.bind(null,o));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=0)}([function(e,t){window.mod={errorMsg:function(i){instructionHolder.style.display="block",instructions.innerHTML="<div style='color: rgba(255, 255, 255, 0.6)'>"+i+"</div><div style='margin-top:10px;font-size:20px;color:rgba(255,255,255,0.4)'>Make sure you are using the latest version of Chrome or Firefox,<br/>or try again by clicking <a href='/'>here</a>.</div>",instructionHolder.style.pointerEvents="all"}};}]);`
+                    initialize();
+                    observer.disconnect();
                 }
             }
-        }
-        if (void 0 !== window.utilities && window.utilities.me) {
-            observer.disconnect();
-            //delete iframe.contentWindow;
-            //if (void 0 !== iframe) document.documentElement.removeChild(iframe)
         }
     });
     observer.observe(document, {
         childList: true,
         subtree: true
     });
-
-
-    //document.documentElement.removeChild(iframe);
-//
-       // iframe.contentWindow.fetch = function(
-/*
-        fetch("https://matchmaker.krunker.io/seek-game?hostname=krunker.io&region=au-syd&autoChangeGame=false&validationToken=7YMd7Wn0roliEH%2FP0ar8w3%2FT%2FWSBen4mNj05pQ6%2BYwMJ0Xz%2BaNaSOrtLzOl%2F2Tla&game=SYD%3A7380s&dataQuery=%7B%22v%22%3A%22zHuND%22%7D", {
-            "headers": {
-                "accept": "",
-                "accept-language": "en-US,en;q=0.6;",
-                "cache-control": "no-cache",
-                "pragma": "no-cache",
-                "sec-fetch-dest": "empty",
-                "sec-fetch-mode": "cors",
-                "sec-fetch-site": "same-site"
-            },
-            "referrer": "https://krunker.io/",
-            "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": null,
-            "method": "GET",
-            "mode": "cors",
-            "credentials": "omit"
-        });*/
-
-        //window.addEventListener('message', function(e) {
-        //    if (e.origin=='null' && e.source == iframe.contentWindow) {
-        //        //document.write(e.data.text);
-         //       console.log(e.data.text);
-           // }
-       // });
-    //}, 0);
 })();
